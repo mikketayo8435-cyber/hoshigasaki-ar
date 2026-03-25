@@ -9,7 +9,7 @@ body {
   height: 100%;
   overflow: hidden;
   font-family: sans-serif;
-  background: #f4f1ea;
+  background: #000;
   color: #222;
 }
 
@@ -24,19 +24,32 @@ body {
 /* ===== AR表示面 ===== */
 #arScene {
   position: fixed !important;
-  inset: 0;
+  inset: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
-  z-index: 1;
+  z-index: 1 !important;
+  background: transparent !important;
 }
 
-#arScene video,
-#arScene canvas {
+/* MindAR / A-Frame の描画レイヤーを広く拾う */
+video {
   position: fixed !important;
   inset: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
-  object-fit: cover;
+  object-fit: cover !important;
+  z-index: 0 !important;
+  background: #000 !important;
+}
+
+canvas,
+.a-canvas {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 1 !important;
+  background: transparent !important;
 }
 
 /* ===== 初期ローディング ===== */
@@ -190,7 +203,6 @@ button {
   margin-bottom: 16px;
 }
 
-/* ===== スマホ微調整 ===== */
 @media (max-width: 600px) {
   #speechText {
     font-size: 0.98rem;

@@ -8,11 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const detailPanel = document.getElementById("detailPanel");
   const detailTitle = document.getElementById("detailTitle");
   const detailText = document.getElementById("detailText");
+
   const detailButton = document.getElementById("detailButton");
   const langButton = document.getElementById("langButton");
   const closeBubbleButton = document.getElementById("closeBubbleButton");
   const closeDetailButton = document.getElementById("closeDetailButton");
   const backButton = document.getElementById("backButton");
+
   const arScene = document.getElementById("arScene");
   const markerTarget = document.getElementById("markerTarget");
   const spiritPlane = document.getElementById("spiritPlane");
@@ -43,27 +45,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function fadeInSpirit() {
     let opacity = 0;
+    spiritPlane.setAttribute("opacity", 0);
+
     const timer = setInterval(() => {
       opacity += 0.08;
       spiritPlane.setAttribute("opacity", Math.min(opacity, 1));
-      if (opacity >= 1) clearInterval(timer);
+      if (opacity >= 1) {
+        clearInterval(timer);
+      }
     }, 40);
+  }
+
+  async function startMindAR() {
+    const mindarSystem = arScene.systems["mindar-image-system"];
+    if (mindarSystem) {
+      await mindarSystem.start();
+    }
   }
 
   applyLanguage();
 
   startButton.addEventListener("click", async () => {
     loading.classList.add("hidden");
-    arScene.classList.remove("hidden");
 
-    try {
-      const mindarSystem = arScene.systems["mindar-image-system"];
-      if (mindarSystem) {
-        await mindarSystem.start();
-      }
-    } catch (error) {
-      alert("ARの起動に失敗しました。READMEの手順で hoshigasaki.mind を配置したか確認してください。");
-      console.error(error);
+    if (arScene.hasLoaded) {
+      await startMindAR();
+    } else {
+      arScene.addEventListener(
+        "loaded",
+        async function onSceneLoaded() {
+          arScene.removeEventListener("loaded", onSceneLoaded);
+          await startMindAR();
+        },
+        { once: true }
+      );
     }
   });
 
@@ -73,6 +88,11 @@ document.addEventListener("DOMContentLoaded", () => {
       fadeInSpirit();
       showBubble();
     }
+  });
+
+  markerTarget.addEventListener("targetLost", () => {
+    // 札を外したら吹き出しも閉じたい場合は下を有効化
+    // hideBubble();
   });
 
   detailButton.addEventListener("click", () => {
@@ -93,16 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   backButton.addEventListener("click", () => {
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      loading.classList.remove("hidden");
-    }
+    window.history.back();
   });
-
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js").catch(console.error);
-    });
-  }
 });

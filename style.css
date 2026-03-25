@@ -1,139 +1,170 @@
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html, body {
+html,
+body {
   margin: 0;
-  padding: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: sans-serif;
   background: #f4f1ea;
   color: #222;
 }
 
+body {
+  position: relative;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ===== AR表示面 ===== */
+#arScene {
+  position: fixed !important;
+  inset: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 1;
+}
+
+#arScene video,
+#arScene canvas {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover;
+}
+
+/* ===== 初期ローディング ===== */
+#loading {
+  position: fixed;
+  inset: 0;
+  background: rgba(244, 241, 234, 0.97);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+}
+
+.loading-box {
+  width: min(90%, 420px);
+  padding: 24px;
+  border-radius: 16px;
+  background: #fffdf8;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  text-align: center;
+}
+
+.loading-box h1 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 1.5rem;
+}
+
+.loading-box p {
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+#markerPreview {
+  width: 120px;
+  height: auto;
+  display: block;
+  margin: 12px auto 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.loading-note {
+  margin-top: 14px;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* ===== ボタン ===== */
 button {
   border: none;
   border-radius: 999px;
   padding: 10px 16px;
   font-size: 0.95rem;
   cursor: pointer;
-  background: #4b5d4a;
+  background: #596a55;
   color: white;
 }
 
-.hidden { display: none !important; }
-
-#loading {
-  position: fixed;
-  inset: 0;
-  background: rgba(244, 241, 234, 0.98);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 30;
-  padding: 20px;
-}
-
-.loading-box {
-  width: min(92%, 440px);
-  padding: 24px;
-  border-radius: 20px;
-  background: #fffdf8;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-  text-align: center;
-}
-
-.loading-box h1 {
-  margin: 0 0 10px;
-  font-size: 1.4rem;
-}
-
-.loading-box p {
-  line-height: 1.7;
-  margin: 0 0 12px;
-  font-size: 0.96rem;
-}
-
-.note {
-  font-size: 0.82rem !important;
-  opacity: 0.8;
-  margin-top: 10px !important;
-}
-
-.marker-preview {
-  width: 140px;
-  margin: 0 auto 14px;
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid rgba(0,0,0,0.08);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-}
-
-.marker-preview img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
+/* ===== 上部バー ===== */
 #topBar {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   padding: max(10px, env(safe-area-inset-top)) 12px 10px;
   background: rgba(20, 20, 20, 0.55);
   color: white;
   z-index: 20;
 }
 
-#backButton { background: rgba(255,255,255,0.15); }
-
-#topBar .title { font-weight: 700; }
-
-#guideMessage {
-  position: fixed;
-  top: calc(56px + env(safe-area-inset-top));
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.92);
-  z-index: 15;
-  font-size: 0.9rem;
+#backButton {
+  background: rgba(255, 255, 255, 0.15);
 }
 
+#topBar .title {
+  font-weight: bold;
+  font-size: 1.05rem;
+}
+
+/* ===== ガイド ===== */
+#guideMessage {
+  position: fixed;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  z-index: 21;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== 吹き出し ===== */
 #speechBubble {
   position: fixed;
   left: 50%;
-  bottom: calc(18px + env(safe-area-inset-bottom));
+  bottom: 18px;
   transform: translateX(-50%);
-  width: min(92%, 540px);
-  background: rgba(255,255,255,0.96);
-  border-radius: 20px;
-  padding: 16px;
-  z-index: 20;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+  width: min(92%, 640px);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  padding: 20px;
+  z-index: 22;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
 }
 
 #speechText {
-  margin: 0 0 12px;
-  line-height: 1.85;
-  font-size: 0.96rem;
+  margin: 0 0 16px;
+  line-height: 1.9;
+  font-size: 1rem;
 }
 
 .bubble-buttons {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
+/* ===== 詳細パネル ===== */
 #detailPanel {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0, 0, 0, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -144,23 +175,29 @@ button {
 .detail-inner {
   width: min(94%, 560px);
   background: #fffdf8;
-  border-radius: 20px;
+  border-radius: 18px;
   padding: 20px;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
 }
 
 .detail-inner h2 {
-  margin: 0 0 10px;
+  margin-top: 0;
+  font-size: 1.2rem;
 }
 
 .detail-inner p {
-  line-height: 1.85;
-  margin: 0 0 16px;
+  line-height: 1.9;
+  margin-bottom: 16px;
 }
 
-a-scene {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
+/* ===== スマホ微調整 ===== */
+@media (max-width: 600px) {
+  #speechText {
+    font-size: 0.98rem;
+  }
+
+  button {
+    font-size: 0.92rem;
+    padding: 10px 14px;
+  }
 }

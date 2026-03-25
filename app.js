@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentLang = "ja";
   let hasShownBubble = false;
+  let canShowAgain = true;
+  let guideTimer = null;
 
   function applyLanguage() {
     const t = window.APP_MESSAGES[currentLang];
@@ -43,6 +45,22 @@ document.addEventListener("DOMContentLoaded", () => {
     speechBubble.classList.add("hidden");
   }
 
+  function showGuide() {
+    guideMessage.classList.remove("hidden");
+  }
+
+  function hideGuide() {
+    guideMessage.classList.add("hidden");
+  }
+
+  function startGuideTimer() {
+    clearTimeout(guideTimer);
+    showGuide();
+    guideTimer = setTimeout(() => {
+      hideGuide();
+    }, 5000);
+  }
+
   function fadeInSpirit() {
     let opacity = 0;
     spiritPlane.setAttribute("opacity", 0);
@@ -56,6 +74,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 40);
   }
 
+  function hideSpirit() {
+    spiritPlane.setAttribute("opacity", 0);
+  }
+
   async function startMindAR() {
     const mindarSystem = arScene.systems["mindar-image-system"];
     if (mindarSystem) {
@@ -67,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   startButton.addEventListener("click", async () => {
     loading.classList.add("hidden");
+    startGuideTimer();
 
     if (arScene.hasLoaded) {
       await startMindAR();
@@ -83,16 +106,21 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   markerTarget.addEventListener("targetFound", () => {
-    if (!hasShownBubble) {
+    hideGuide();
+
+    if (!hasShownBubble && canShowAgain) {
       hasShownBubble = true;
+      canShowAgain = false;
       fadeInSpirit();
       showBubble();
     }
   });
 
   markerTarget.addEventListener("targetLost", () => {
-    // 札を外したら吹き出しも閉じたい場合は下を有効化
-    // hideBubble();
+    hideBubble();
+    hideSpirit();
+    hasShownBubble = false;
+    canShowAgain = true;
   });
 
   detailButton.addEventListener("click", () => {
@@ -105,6 +133,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   closeBubbleButton.addEventListener("click", () => {
     hideBubble();
+    // ここでは canShowAgain を戻さない
+    // 一度札を外して targetLost になったときだけ再表示可能にする
   });
 
   langButton.addEventListener("click", () => {

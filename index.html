@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>星が崎城跡 守り主AR</title>
-  <meta name="theme-color" content="#4b5d4a" />
-  <link rel="manifest" href="manifest.webmanifest" />
+
   <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.webmanifest" />
 
   <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
@@ -22,16 +22,16 @@
     <div class="loading-box">
       <h1>星が崎城跡 守り主AR</h1>
       <p id="loadingText">札をうつす準備をしています…</p>
-      <div class="marker-preview">
-        <img src="assets/marker.png" alt="認識札の見本" />
-      </div>
+
+      <img id="markerPreview" src="assets/marker.png" alt="認識札イメージ" />
+
       <button id="startButton">守り主に会う</button>
-      <p class="note">※ はじめて開くときは、カメラ許可が必要です。</p>
+      <p class="loading-note">※ はじめて開くときは、カメラ許可が必要です。</p>
     </div>
   </div>
 
   <div id="topBar">
-    <button id="backButton" type="button">← もどる</button>
+    <button id="backButton">← もどる</button>
     <div class="title">星が崎城跡</div>
   </div>
 
@@ -40,9 +40,9 @@
   <div id="speechBubble" class="hidden">
     <p id="speechText"></p>
     <div class="bubble-buttons">
-      <button id="detailButton" type="button">くわしく見る</button>
-      <button id="langButton" type="button">EN</button>
-      <button id="closeBubbleButton" type="button">とじる</button>
+      <button id="detailButton">くわしく見る</button>
+      <button id="langButton">EN</button>
+      <button id="closeBubbleButton">とじる</button>
     </div>
   </div>
 
@@ -50,19 +50,17 @@
     <div class="detail-inner">
       <h2 id="detailTitle">星が崎城跡について</h2>
       <p id="detailText"></p>
-      <button id="closeDetailButton" type="button">もどる</button>
+      <button id="closeDetailButton">もどる</button>
     </div>
   </div>
 
   <a-scene
     id="arScene"
-    class="hidden"
     mindar-image="imageTargetSrc: assets/hoshigasaki.mind; autoStart: false; uiScanning: false; uiLoading: false;"
     color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights"
     vr-mode-ui="enabled: false"
     device-orientation-permission-ui="enabled: false"
-    embedded
   >
     <a-assets>
       <img id="spiritImage" src="assets/spirit.png" />
@@ -74,9 +72,9 @@
       <a-plane
         id="spiritPlane"
         src="#spiritImage"
-        position="0 0.2 0"
-        width="0.95"
-        height="1.42"
+        position="0 0 0"
+        width="1.2"
+        height="1.8"
         transparent="true"
         opacity="0"
       ></a-plane>

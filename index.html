@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>星が崎城跡 守り主AR</title>
+  <meta name="theme-color" content="#4b5d4a" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- A-Frame -->
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+
+  <!-- MindAR for A-Frame -->
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+  <script src="messages.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div id="loading">
+    <div class="loading-box">
+      <h1>星が崎城跡 守り主AR</h1>
+      <p id="loadingText">札をうつす準備をしています…</p>
+      <div class="marker-preview">
+        <img src="assets/marker.png" alt="認識札の見本" />
+      </div>
+      <button id="startButton">守り主に会う</button>
+      <p class="note">※ はじめて開くときは、カメラ許可が必要です。</p>
+    </div>
+  </div>
+
+  <div id="topBar">
+    <button id="backButton" type="button">← もどる</button>
+    <div class="title">星が崎城跡</div>
+  </div>
+
+  <div id="guideMessage">札をうつしてください</div>
+
+  <div id="speechBubble" class="hidden">
+    <p id="speechText"></p>
+    <div class="bubble-buttons">
+      <button id="detailButton" type="button">くわしく見る</button>
+      <button id="langButton" type="button">EN</button>
+      <button id="closeBubbleButton" type="button">とじる</button>
+    </div>
+  </div>
+
+  <div id="detailPanel" class="hidden">
+    <div class="detail-inner">
+      <h2 id="detailTitle">星が崎城跡について</h2>
+      <p id="detailText"></p>
+      <button id="closeDetailButton" type="button">もどる</button>
+    </div>
+  </div>
+
+  <a-scene
+    id="arScene"
+    class="hidden"
+    mindar-image="imageTargetSrc: assets/hoshigasaki.mind; autoStart: false; uiScanning: false; uiLoading: false;"
+    color-space="sRGB"
+    renderer="colorManagement: true, physicallyCorrectLights"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false"
+    embedded
+  >
+    <a-assets>
+      <img id="spiritImage" src="assets/spirit.png" />
+    </a-assets>
+
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+    <a-entity id="markerTarget" mindar-image-target="targetIndex: 0">
+      <a-plane
+        id="spiritPlane"
+        src="#spiritImage"
+        position="0 0.2 0"
+        width="0.95"
+        height="1.42"
+        transparent="true"
+        opacity="0"
+      ></a-plane>
+    </a-entity>
+  </a-scene>
+</body>
+</html>

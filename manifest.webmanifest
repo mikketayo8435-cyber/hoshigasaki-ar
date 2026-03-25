@@ -1,0 +1,10 @@
+{
+  "name": "星が崎城跡 守り主AR",
+  "short_name": "守り主AR",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f1ea",
+  "theme_color": "#4b5d4a",
+  "lang": "ja",
+  "icons": []
+}
